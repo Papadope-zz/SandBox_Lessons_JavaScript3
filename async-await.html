@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Async/Await</title>
+</head>
+<body>
+  <script>
+    console.log("App!");
+    const colleagues = {}
+    fetch("https://api.randomuser.me/")
+    .then((res)=>{
+      return res.json();
+    })
+    .then((data)=>{
+
+      const gender = data.results[0].gender;
+      console.log(gender, data.results[0]);
+      let query = "?gender=female";
+      if ( gender === "female" ){
+        query = "?gender=male";
+      }
+      colleagues.one = {
+        name: data.results[0].name.first,
+        last: data.results[0].name.last,
+      }
+
+      fetch("https://api.randomuser.me/" + query)
+      .then( res => res.json())
+      .then( data =>{
+        const gender2 = data.results[0].gender;
+        console.log(gender2);
+        colleagues.two = {
+        name: data.results[0].name.first,
+        last: data.results[0].name.last,
+      }
+      console.log(colleagues);
+
+      })
+      .catch(err => console.error(err));
+
+    })
+    .catch((error)=>{
+      console.error(error);
+    })
+
+    async function init(){
+      console.log(2);
+      const res = await fetch("https://api.randomuser.me/");
+      const data = await res.json();
+      const gender = data.results[0].gender;
+      console.log(gender);
+      const query = ( gender  === "male") ? "?gender=female" : "?gender=male";
+      const res2 = await fetch("https://api.randomuser.me/" + query);
+      const data2 = await res2.json();
+      console.log(data2.results[0].gender);
+
+    }
+    console.log(1);
+    init();
+    console.log(3);
+</script>
+</body>
+</html>

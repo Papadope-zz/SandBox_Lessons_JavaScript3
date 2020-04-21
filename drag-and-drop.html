@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      #draggable,
+      #drop-target {
+        border: 2px solid black;
+        padding: 20px;
+      }
+      #drop-target #draggable {
+        padding: 10px;
+        background-color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="draggable" draggable="true">Draggable Element</div>
+    <div id="drop-target">
+      Drop Target
+    </div>
+    <script>
+      const dropTarget = document.querySelector("#drop-target");
+      const draggable = document.querySelector("#draggable");
+      function handleDragOver(event) {
+        event.preventDefault();
+      }
+      dropTarget.addEventListener("dragover", handleDragOver);
+      draggable.addEventListener("dragstart", handleDragStart);
+      function handleDragStart(e) {
+        console.log("dragstart event!", e);
+        // e.dataTransfer.setData( "text/plain", "Some data:" + Math.random() );
+        // e.target == element that 'dragstart'-ed:
+        // Send plain test (String)
+        // e.dataTransfer.setData( "text/plain", e.target.getAttribute("id") );
+        // Send complex data types/structures
+          const obj = {
+            id: e.target.getAttribute("id"),
+            list: [1,2,3]
+          }
+          const json = JSON.stringify( obj );
+          e.dataTransfer.setData( "text/plain", json );
+      }
+      dropTarget.addEventListener( "drop", handleDrop );
+      function handleDrop(e){
+        e.preventDefault();
+        let json = e.dataTransfer.getData( "text/plain" );
+        const data = JSON.parse( json );
+        console.log( data.id );
+        const droppedEl = document.getElementById( data.id ); // e.target === dropTarget
+        e.target.appendChild( droppedEl );
+        console.log( "drop event!", droppedEl );
+      }
+  </script>
+  </body>
+</html>

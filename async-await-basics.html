@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      fetch("https://api.randomuser.me/")
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(user){
+        console.log( user.results[0].email );
+      })
+      .catch(function(err){
+        console.log( err );
+      });
+
+    // Using async/await (Simple example)
+    async function init(){
+      try {
+        const response = await fetch("https://api.randomuser.me/");
+        const user = await response.json(); // .json() is also async!
+        console.log( "A/A", user.results[0].email );
+        const response2 = await fetch("https://api.randomuser.me/");
+        const user2 = await response2.json();
+        console.log( "A/A", user2.results[0].email );
+      } catch(e){
+        console.log(e);
+      }
+    }
+    init();
+    // PRACTICE: Recreate the above functionality using Promises (then)
+
+    // 'async' functions return an implicit Promise
+    async function someThing(){
+      console.log("someThing()");
+      return 555; // <-- This will converte to a Promise
+    }
+    someThing()
+    .then(function(result){ 
+      console.log("result:", result)
+    });
+
+
+    
+    // async function app(){
+    //   console.log(0);
+    //   await init();
+    //   console.log(1);
+    // }
+    // app();
+    </script>
+  </body>
+</html>
